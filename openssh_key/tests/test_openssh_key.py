@@ -5,9 +5,15 @@ import pytest
 from openssh_key.keyfile import AUTH_MAGIC, OpenSSHKeyFile
 from openssh_key.openssh_io import unarmor_ascii_openssh_key
 
-key_path = os.path.realpath(os.path.join(os.path.dirname(__file__), 'insecure-test.ssh2'))
-pub_path = os.path.realpath(os.path.join(os.path.dirname(__file__), 'insecure-test.pub'))
-pem_path = os.path.realpath(os.path.join(os.path.dirname(__file__), 'insecure-test.pem'))
+key_path = os.path.realpath(
+    os.path.join(os.path.dirname(__file__), 'insecure-test.ssh2')
+)
+pub_path = os.path.realpath(
+    os.path.join(os.path.dirname(__file__), 'insecure-test.pub')
+)
+pem_path = os.path.realpath(
+    os.path.join(os.path.dirname(__file__), 'insecure-test.pem')
+)
 
 
 def test_unarmor():
@@ -54,7 +60,8 @@ def test_convert():
 
     public_key = private_key_obj.public_key()
     ssh_public = public_key.public_bytes(
-        encoding=serialization.Encoding.OpenSSH, format=serialization.PublicFormat.OpenSSH
+        encoding=serialization.Encoding.OpenSSH,
+        format=serialization.PublicFormat.OpenSSH,
     ).decode()
     assert keypair.public_key_string.startswith(ssh_public)
 

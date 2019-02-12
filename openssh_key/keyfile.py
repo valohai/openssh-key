@@ -28,7 +28,9 @@ class OpenSSHKeyFile:
         bio = io.BytesIO(binary_data)
         header = bio.read(len(AUTH_MAGIC))
         if header != AUTH_MAGIC:
-            raise ValueError('data began with %r, not %r' % (header, AUTH_MAGIC))
+            raise ValueError(
+                'data began with %r, not %r' % (header, AUTH_MAGIC)
+            )
         kf = cls()
         kf.cipher_name = read_openssh_string(bio)
         kf.kdf_name = read_openssh_string(bio)
@@ -38,7 +40,9 @@ class OpenSSHKeyFile:
         kf.encrypted_private_keys = read_openssh_string(bio)
         leftover = bio.read()
         if leftover:
-            raise ValueError('not all data was read (left over: %r)' % leftover)
+            raise ValueError(
+                'not all data was read (left over: %r)' % leftover
+            )
         return kf
 
     @classmethod
@@ -50,12 +54,16 @@ class OpenSSHKeyFile:
             decrypted_private_keys = self.encrypted_private_keys
         else:
             # TODO: support ciphers and populate decrypted_private_key here
-            raise NotImplementedError('The %r cipher is not yet supported' % self.cipher_name)
+            raise NotImplementedError(
+                'The %r cipher is not yet supported' % self.cipher_name
+            )
 
         bio = io.BytesIO(decrypted_private_keys)
         checkint1, checkint2 = struct.unpack('!II', bio.read(8))
         if checkint1 != checkint2:
-            raise ValueError('checkint mismatch: %08x != %08x' % (checkint1, checkint2))
+            raise ValueError(
+                'checkint mismatch: %08x != %08x' % (checkint1, checkint2)
+            )
         for public_key in self.public_keys:
             kp = Keypair()
             kp.public_key = public_key

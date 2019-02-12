@@ -23,7 +23,10 @@ def convert_rsa_private_key(keypair):
         finally:
             backend._lib.OPENSSL_free(bn_ptr)
 
-    (n, e, d, iqmp, p, q) = [_trim_bn_to_int(value) for value in _read_KEY_RSA(io.BytesIO(keypair.private_key))]
+    (n, e, d, iqmp, p, q) = [
+        _trim_bn_to_int(value)
+        for value in _read_KEY_RSA(io.BytesIO(keypair.private_key))
+    ]
 
     numbers = RSAPrivateNumbers(
         d=d,
