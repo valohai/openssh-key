@@ -1,0 +1,13 @@
+*.bin
+*.egg
+*.egg-info/
+*.hex
+*.py[cod]
+.*cache
+.coverage
+.coverage.*
+.tox/
+build/
+dist/
+htmlcov/
+MANIFEST
