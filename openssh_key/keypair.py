@@ -18,5 +18,6 @@ class Keypair:
     def convert_to_cryptography_key(self):
         if self.key_format == b'ssh-rsa':
             from .cryptography_interop import convert_rsa_private_key
+
             return convert_rsa_private_key(keypair=self)
         raise NotImplementedError('Unable to convert %s keys' % self.key_format)

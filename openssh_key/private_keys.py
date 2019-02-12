@@ -2,12 +2,13 @@ from .openssh_io import read_openssh_string
 
 
 def _read_KEY_RSA(bio):
-    read_openssh_string(bio)  # n
-    read_openssh_string(bio)  # e
-    read_openssh_string(bio)  # d
-    read_openssh_string(bio)  # iqmp
-    read_openssh_string(bio)  # p
-    read_openssh_string(bio)  # q
+    n = read_openssh_string(bio)  # sshbuf_put_bignum2(n)
+    e = read_openssh_string(bio)  # sshbuf_put_bignum2(e)
+    d = read_openssh_string(bio)  # sshbuf_put_bignum2(d)
+    iqmp = read_openssh_string(bio)  # sshbuf_put_bignum2(iqmp)
+    p = read_openssh_string(bio)  # sshbuf_put_bignum2(p)
+    q = read_openssh_string(bio)  # sshbuf_put_bignum2(q)
+    return (n, e, d, iqmp, p, q)
 
 
 def _read_KEY_RSA_CERT(bio):
