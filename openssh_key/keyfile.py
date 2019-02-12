@@ -1,6 +1,7 @@
 import io
 import struct
 
+from .excs import CipherNotSupported
 from .keypair import Keypair
 from .private_keys import read_private_key_data
 from .openssh_io import read_openssh_string, unarmor_ascii_openssh_key
@@ -54,7 +55,7 @@ class OpenSSHKeyFile:
             decrypted_private_keys = self.encrypted_private_keys
         else:
             # TODO: support ciphers and populate decrypted_private_key here
-            raise NotImplementedError(
+            raise CipherNotSupported(
                 'The %r cipher is not yet supported' % self.cipher_name
             )
 

@@ -1,0 +1,2 @@
+class CipherNotSupported(NotImplementedError):
+    pass
