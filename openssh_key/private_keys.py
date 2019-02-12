@@ -103,8 +103,9 @@ _readers = {
 
 def read_private_key_data(bio):
     """
-    Read enough data from bio to read a private key, but do not (currently)
-    attempt to parse it in any way.
+    Read enough data from bio to fully read a private key.
+
+    (The data read is thrown away, though.)
 
     This is required since the format does not contain the actual length
     of the privately-serialized private key data.  The knowledge of what
@@ -115,7 +116,6 @@ def read_private_key_data(bio):
     :param bio: Seekable binary IO object to read from
     :return: Tuple of (key format, private key data).
     """
-
     key_format = read_openssh_string(bio)
     start_idx = bio.tell()
     reader = _readers.get(key_format.decode())

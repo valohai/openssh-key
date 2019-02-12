@@ -1,2 +1,4 @@
 class CipherNotSupported(NotImplementedError):
-    pass
+    """
+    Raised when a keyfile is encrypted with a cipher that is not supported.
+    """

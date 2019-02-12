@@ -2,20 +2,27 @@ import base64
 
 
 class Keypair:
-    # The public key material in a private format
-    public_key: bytes = None
+    """
+    Encapsulates a public key, a private key and an associated comment.
+    """
 
-    # The key format (e.g. `ssh-rsa`)
-    key_format: bytes = None
+    # The public key material in an opaque format
+    public_key = b''
 
-    # The private key in a private serialization format dependent on key_format
-    private_key: bytes = None
+    # The key format (e.g. b'ssh-rsa')
+    key_format = b''
 
-    # The comment bytes, if any
-    comment: bytes = None
+    # The private key in an opaque format dependent on key_format
+    private_key = b''
+
+    # The comment bytes, if any; defaults to b''
+    comment = b''
 
     @property
     def public_key_string(self):
+        """
+        Get an "authorized_keys" style string representing the public key.
+        """
         return '%s %s %s' % (
             self.key_format.decode(),
             base64.b64encode(self.public_key).decode(),
@@ -23,10 +30,13 @@ class Keypair:
         )
 
     def convert_to_cryptography_key(self):
+        """
+        Convert the key data into an usable private key object.
+        """
         if self.key_format == b'ssh-rsa':
-            from .cryptography_interop import convert_rsa_private_key
+            from .cryptography_interop import _convert_rsa_private_key
 
-            return convert_rsa_private_key(keypair=self)
+            return _convert_rsa_private_key(keypair=self)
         raise NotImplementedError(
             'Unable to convert %s keys' % self.key_format
         )
