@@ -13,7 +13,10 @@ def read_openssh_string(bin_fp):
     :param bin_fp:
     :return: bytes
     """
-    length, = struct.unpack('!I', bin_fp.read(4))
+    len_buf = bin_fp.read(4)
+    if not len_buf:
+        raise EOFError()
+    length, = struct.unpack('!I', len_buf)
     buf = bin_fp.read(length)
     if len(buf) != length:
         raise ValueError('short read for string (expected %d bytes, read %d)' % (length, len(buf)))
