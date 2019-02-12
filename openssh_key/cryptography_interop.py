@@ -12,7 +12,7 @@ from cryptography.hazmat.primitives.asymmetric.rsa import (
 from openssh_key.private_keys import _read_KEY_RSA
 
 
-def convert_rsa_private_key(keypair):
+def _convert_rsa_private_key(keypair):
     backend = Backend()
 
     def _trim_bn_to_int(s):

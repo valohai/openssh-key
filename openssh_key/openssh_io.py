@@ -5,13 +5,12 @@ import struct
 
 def read_openssh_string(bin_fp):
     """
-    Read a length-prefixed ("OpenSSH-style Pascal") string
-    from the given binary file-like object.
+    Read a length-prefixed ("OpenSSH-style Pascal") string from a file.
 
     This format is described in https://tools.ietf.org/html/rfc4251
     (look for "Arbitrary length binary string").
 
-    :param bin_fp:
+    :param bin_fp: Binary file-like object
     :return: bytes
     """
     len_buf = bin_fp.read(4)

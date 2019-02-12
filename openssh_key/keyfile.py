@@ -10,12 +10,31 @@ AUTH_MAGIC = b"openssh-key-v1\0"
 
 
 class OpenSSHKeyFile:
-    cipher_name: bytes = None
-    kdf_name: bytes = None
-    kdf_options: bytes = None
-    num_keys: int = None
-    public_keys: list = None
-    encrypted_private_keys: bytes = None
+    """
+    Encapsulates a number of OpenSSH keys.
+    """
+
+    # The cipher used to encrypt this file.
+    # At least b'none' and b'aes256-ctr' are known to exist.
+    cipher_name = b''
+
+    # The key derivation function used for the cipher's key material.
+    # In the PROTOCOL.key file, b'none' or b'bcrypt' are specified.
+    kdf_name = b''
+
+    # KDF-specific options for the KDF.
+    kdf_options = b''
+
+    # The number of keys in this file.
+    num_keys = 0
+
+    # A list of bytestrings describing the public keys in this file;
+    # accessible without knowing a passphrase.
+    public_keys = ()
+
+    # A (possibly) encrypted blob of private key data;
+    # use .decrypt_keypairs() to parse this.
+    encrypted_private_keys = None
 
     @classmethod
     def parse_binary(cls, binary_data):
@@ -25,7 +44,6 @@ class OpenSSHKeyFile:
         The format is described in
         https://github.com/openssh/openssh-portable/blob/5c68ea8da790d711e6dd5f4c30d089c54032c59a/PROTOCOL.key
         """
-
         bio = io.BytesIO(binary_data)
         header = bio.read(len(AUTH_MAGIC))
         if header != AUTH_MAGIC:
@@ -47,10 +65,23 @@ class OpenSSHKeyFile:
         return kf
 
     @classmethod
-    def parse_text(cls, text_fp):
-        return cls.parse_binary(unarmor_ascii_openssh_key(text_fp))
+    def parse_text(cls, data):
+        """
+        Parse ASCII-armored ("-----BEGIN OPENSSH PRIVATE KEY-----")
+        text into an OpenSSHKeyFile object.
+
+        :param data: String, bytes or filelike with a
+                     textual OpenSSH private key.
+        """
+        return cls.parse_binary(unarmor_ascii_openssh_key(data))
 
     def decrypt_keypairs(self, passphrase=None):
+        """
+        Generate decrypted keypairs from the file's contents.
+
+        :param passphrase: The passphrase required to decrypt the file.
+        :return: Generator of Keypair objects.
+        """
         if self.cipher_name == b'none':
             decrypted_private_keys = self.encrypted_private_keys
         else:
