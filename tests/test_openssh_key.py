@@ -2,6 +2,7 @@ import os
 
 import pytest
 
+from openssh_key.excs import CipherNotSupported
 from openssh_key.keyfile import AUTH_MAGIC, OpenSSHKeyFile
 from openssh_key.openssh_io import unarmor_ascii_openssh_key
 
@@ -13,6 +14,9 @@ pub_path = os.path.realpath(
 )
 pem_path = os.path.realpath(
     os.path.join(os.path.dirname(__file__), 'insecure-test.pem')
+)
+enc_key_path = os.path.realpath(
+    os.path.join(os.path.dirname(__file__), 'insecure-encrypted-test.ssh2')
 )
 
 
@@ -32,6 +36,13 @@ def test_read():
     with open(pub_path, 'rt') as infp:
         pub_data = infp.read().strip()
         assert keypair.public_key_string == pub_data
+
+
+def test_read_encrypted():
+    with open(enc_key_path, 'rb') as infp:
+        ki = OpenSSHKeyFile.parse_text(infp)
+        with pytest.raises(CipherNotSupported):
+            list(ki.decrypt_keypairs())
 
 
 def test_convert():
