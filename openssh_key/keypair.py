@@ -2,10 +2,17 @@ import base64
 
 
 class Keypair:
-    public_key: bytes = None  # The public key
-    key_format: bytes = None  # The key format
-    private_key: bytes = None  # The private key in a private serialization format dependent on key_format
-    comment: bytes = None  # The comment
+    # The public key material in a private format
+    public_key: bytes = None
+
+    # The key format (e.g. `ssh-rsa`)
+    key_format: bytes = None
+
+    # The private key in a private serialization format dependent on key_format
+    private_key: bytes = None
+
+    # The comment bytes, if any
+    comment: bytes = None
 
     @property
     def public_key_string(self):
@@ -20,4 +27,6 @@ class Keypair:
             from .cryptography_interop import convert_rsa_private_key
 
             return convert_rsa_private_key(keypair=self)
-        raise NotImplementedError('Unable to convert %s keys' % self.key_format)
+        raise NotImplementedError(
+            'Unable to convert %s keys' % self.key_format
+        )

@@ -5,7 +5,8 @@ import struct
 
 def read_openssh_string(bin_fp):
     """
-    Read a length-prefixed ("OpenSSH-style Pascal") string from the given binary fp.
+    Read a length-prefixed ("OpenSSH-style Pascal") string
+    from the given binary file-like object.
 
     This format is described in https://tools.ietf.org/html/rfc4251
     (look for "Arbitrary length binary string").
@@ -19,7 +20,10 @@ def read_openssh_string(bin_fp):
     length, = struct.unpack('!I', len_buf)
     buf = bin_fp.read(length)
     if len(buf) != length:
-        raise ValueError('short read for string (expected %d bytes, read %d)' % (length, len(buf)))
+        raise ValueError(
+            'short read for string (expected %d bytes, read %d)'
+            % (length, len(buf))
+        )
     return buf
 
 
@@ -27,8 +31,8 @@ def unarmor_ascii_openssh_key(data):
     """
     Read the binary data from an ascii-armored OpenSSH private key file.
 
-    :param data: String, bytes or `.read()`able containing (and positioned at)
-                 an OpenSSH private key.
+    :param data: String, bytes or `.read()`able
+                 containing (and positioned at) an OpenSSH private key.
     :return: The raw binary data.
     """
     if isinstance(data, str):
@@ -48,7 +52,9 @@ def unarmor_ascii_openssh_key(data):
     while True:
         line = next(fp)
         if not line:
-            raise ValueError('unexpected end-of-file before OpenSSH Private Key postlude')
+            raise ValueError(
+                'unexpected end-of-file before OpenSSH Private Key postlude'
+            )
         if line == '-----END OPENSSH PRIVATE KEY-----\n':
             break
         lines.append(line)

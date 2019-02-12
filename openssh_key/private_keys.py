@@ -32,7 +32,9 @@ def _read_KEY_DSA(bio):
 def _read_KEY_ECDSA(bio):
     # TODO: test this
     read_openssh_string(bio)  # sshbuf_put_cstring(sshkey_curve_nid_to_name)
-    read_openssh_string(bio)  # sshbuf_put_eckey -> sshbuf_put_ec -> 1 x sshbuf_put_string
+    read_openssh_string(
+        bio
+    )  # sshbuf_put_eckey -> sshbuf_put_ec -> 1 x sshbuf_put_string
     read_openssh_string(bio)  # sshbuf_put_bignum2(EC_KEY_get0_private_key)
 
 
@@ -63,14 +65,18 @@ def _read_KEY_XMSS_CERT(bio):
     read_openssh_string(bio)  # sshbuf_put_cstring(name)
     read_openssh_string(bio)  # sshbuf_put_string(pk)
     read_openssh_string(bio)  # sshbuf_put_string(sk)
-    raise NotImplementedError('sshkey_xmss_serialize_state_opt(): reading not supported')
+    raise NotImplementedError(
+        'sshkey_xmss_serialize_state_opt(): reading not supported'
+    )
 
 
 def _read_KEY_XMSS(bio):
     read_openssh_string(bio)  # sshbuf_put_cstring(name)
     read_openssh_string(bio)  # sshbuf_put_string(pk)
     read_openssh_string(bio)  # sshbuf_put_string(sk)
-    raise NotImplementedError('sshkey_xmss_serialize_state_opt(): reading not supported')
+    raise NotImplementedError(
+        'sshkey_xmss_serialize_state_opt(): reading not supported'
+    )
 
 
 _readers = {
