@@ -1,4 +1,4 @@
-from openssh_key import read_openssh_string
+from .openssh_io import read_openssh_string
 
 
 def _read_KEY_RSA(bio):

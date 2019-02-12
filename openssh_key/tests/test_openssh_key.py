@@ -1,7 +1,9 @@
 import os
-from pprint import pprint
 
-from openssh_key import AUTH_MAGIC, OpenSSHKeyInfo, unarmor_ascii_openssh_key
+import pytest
+
+from openssh_key.keyfile import AUTH_MAGIC, OpenSSHKeyFile
+from openssh_key.openssh_io import unarmor_ascii_openssh_key
 
 key_path = os.path.realpath(os.path.join(os.path.dirname(__file__), 'insecure-test.ssh2'))
 pub_path = os.path.realpath(os.path.join(os.path.dirname(__file__), 'insecure-test.pub'))
@@ -15,11 +17,10 @@ def test_unarmor():
 
 def test_read():
     with open(key_path, 'rb') as infp:
-        ki = OpenSSHKeyInfo.parse_text(infp)
+        ki = OpenSSHKeyFile.parse_text(infp)
     keypairs = list(ki.decrypt_keypairs())
     assert len(keypairs) == 1
     keypair = keypairs[0]
-    pprint(vars(keypair))
     assert keypair.key_format == b'ssh-rsa'
     with open(pub_path, 'rt') as infp:
         pub_data = infp.read().strip()
