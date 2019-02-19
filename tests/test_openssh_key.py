@@ -25,6 +25,20 @@ def test_unarmor():
         bin_data = unarmor_ascii_openssh_key(infp)
         assert bin_data.startswith(AUTH_MAGIC)
 
+    assert (
+        unarmor_ascii_openssh_key(
+            '-----BEGIN OPENSSH PRIVATE KEY-----\naGVsbG8=\n-----END OPENSSH PRIVATE KEY-----'
+        )
+        == b'hello'
+    )
+
+    assert (
+        unarmor_ascii_openssh_key(
+            '-----BEGIN OPENSSH PRIVATE KEY-----\nd29ybGQ=\n-----END OPENSSH PRIVATE KEY-----'
+        )
+        == b'world'
+    )
+
 
 def test_read():
     with open(key_path, 'rb') as infp:
