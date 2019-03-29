@@ -50,8 +50,9 @@ def _read_KEY_DSA_CERT(bio):
 
 
 def _read_KEY_ED25519(bio):
-    read_openssh_string(bio)  # sshbuf_put_string(ed25519_pk)
-    read_openssh_string(bio)  # sshbuf_put_string(ed25519_sk)
+    pk = read_openssh_string(bio)  # sshbuf_put_string(ed25519_pk)
+    sk = read_openssh_string(bio)  # sshbuf_put_string(ed25519_sk)
+    return (pk, sk)
 
 
 def _read_KEY_ED25519_CERT(bio):
