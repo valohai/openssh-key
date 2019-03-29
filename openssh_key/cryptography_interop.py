@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives.asymmetric.rsa import (
     rsa_crt_iqmp,
 )
 
-from openssh_key.private_keys import _read_KEY_RSA
+from openssh_key.private_keys import _read_KEY_RSA, _read_KEY_ED25519
 
 
 def _convert_rsa_private_key(keypair):
@@ -39,3 +39,9 @@ def _convert_rsa_private_key(keypair):
     )
 
     return numbers.private_key(backend)
+
+
+def _convert_ed25519(keypair):
+    from cryptography.hazmat.primitives.asymmetric import ed25519
+    (pk, sk) = _read_KEY_ED25519(io.BytesIO(keypair.private_key))
+    return ed25519.Ed25519PrivateKey.from_private_bytes(pk)

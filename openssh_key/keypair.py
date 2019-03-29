@@ -37,6 +37,11 @@ class Keypair:
             from .cryptography_interop import _convert_rsa_private_key
 
             return _convert_rsa_private_key(keypair=self)
+
+        if self.key_format == b'ssh-ed25519':
+            from .cryptography_interop import _convert_ed25519
+            return _convert_ed25519(keypair=self)
+
         raise NotImplementedError(
             'Unable to convert %s keys' % self.key_format
         )
