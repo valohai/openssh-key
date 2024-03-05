@@ -19,7 +19,7 @@ dependencies = []
 
 [project.optional-dependencies]
 convert = [
-    "cryptography",
+    "cryptography<42", # Will be unpinned shortly
 ]
 dev = [
     "pytest-cov",
