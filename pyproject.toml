@@ -50,6 +50,8 @@ extend-select = [
     "F",
     "I",
     "PL",
+    "PT",
+    "PTH",
     "RET",
     "S",
     "SIM",
