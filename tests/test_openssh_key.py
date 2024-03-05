@@ -1,10 +1,11 @@
+import gzip
 import pathlib
 
 import pytest
 
 from openssh_key.excs import CipherNotSupported
 from openssh_key.keyfile import AUTH_MAGIC, OpenSSHKeyFile
-from openssh_key.openssh_io import unarmor_ascii_openssh_key
+from openssh_key.openssh_io import convert_openssl_unsigned_bn_binary_to_int, unarmor_ascii_openssh_key
 
 tests_path = pathlib.Path(__file__).parent.resolve()
 rsa_key_path = tests_path / "insecure-test.ssh2"
@@ -13,6 +14,7 @@ rsa_pem_path = tests_path / "insecure-test.pem"
 enc_key_path = tests_path / "insecure-encrypted-test.ssh2"
 ed25519_key_path = tests_path / "insecure-ed25519-test.ssh2"
 ed25519_pub_path = tests_path / "insecure-ed25519-test.pub"
+bn_dumps_path = tests_path / "bn_dumps.txt.gz"
 
 
 def test_unarmor():
@@ -90,3 +92,13 @@ def test_convert_ed25519():
     assert private_key_obj.public_key()  # smoke test :shrug:
 
     assert ed25519_pub_path.read_text().startswith(keypair.public_key_string)
+
+
+def test_bn():
+    if not bn_dumps_path.exists():
+        pytest.skip("No bn_dumps.txt.gz file; run make in the tests directory")
+    with gzip.GzipFile(bn_dumps_path, "rb") as infp:
+        for line in infp:
+            nbits, bnhex, dec = line.strip().split()
+            bnbin = bytes.fromhex(bnhex.decode())
+            assert convert_openssl_unsigned_bn_binary_to_int(bnbin) == int(dec)

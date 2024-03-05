@@ -3,6 +3,14 @@ import io
 import struct
 
 
+def convert_openssl_unsigned_bn_binary_to_int(value: bytes) -> int:
+    # See `BN_bn2bin`/`BN_bin2bn` in OpenSSL.
+    # It turns out that what `BN_bn2bin` produces, in old-school C, is for
+    # unsigned big-endian integers (which is the default for `BN_bin2bn`)
+    # exactly what Python's `int.from_bytes` expects.
+    return int.from_bytes(value.lstrip(b"\x00"), "big")
+
+
 def read_openssh_string(bin_fp):
     """
     Read a length-prefixed ("OpenSSH-style Pascal") string from a file.
