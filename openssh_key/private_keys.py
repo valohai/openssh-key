@@ -65,7 +65,7 @@ def _read_KEY_XMSS_CERT(bio):
     read_openssh_string(bio)  # sshbuf_put_string(pk)
     read_openssh_string(bio)  # sshbuf_put_string(sk)
     raise NotImplementedError(
-        'sshkey_xmss_serialize_state_opt(): reading not supported',
+        "sshkey_xmss_serialize_state_opt(): reading not supported",
     )
 
 
@@ -74,29 +74,29 @@ def _read_KEY_XMSS(bio):
     read_openssh_string(bio)  # sshbuf_put_string(pk)
     read_openssh_string(bio)  # sshbuf_put_string(sk)
     raise NotImplementedError(
-        'sshkey_xmss_serialize_state_opt(): reading not supported',
+        "sshkey_xmss_serialize_state_opt(): reading not supported",
     )
 
 
 _readers = {
-    'ecdsa-sha2-nistp256': _read_KEY_ECDSA,
-    'ecdsa-sha2-nistp256-cert-v01@openssh.com': _read_KEY_ECDSA_CERT,
-    'ecdsa-sha2-nistp384': _read_KEY_ECDSA,
-    'ecdsa-sha2-nistp384-cert-v01@openssh.com': _read_KEY_ECDSA_CERT,
-    'ecdsa-sha2-nistp521': _read_KEY_ECDSA,
-    'ecdsa-sha2-nistp521-cert-v01@openssh.com': _read_KEY_ECDSA_CERT,
-    'rsa-sha2-256': _read_KEY_RSA,
-    'rsa-sha2-256-cert-v01@openssh.com': _read_KEY_RSA_CERT,
-    'rsa-sha2-512': _read_KEY_RSA,
-    'rsa-sha2-512-cert-v01@openssh.com': _read_KEY_RSA_CERT,
-    'ssh-dss': _read_KEY_DSA,
-    'ssh-dss-cert-v01@openssh.com': _read_KEY_DSA_CERT,
-    'ssh-ed25519': _read_KEY_ED25519,
-    'ssh-ed25519-cert-v01@openssh.com': _read_KEY_ED25519_CERT,
-    'ssh-rsa': _read_KEY_RSA,
-    'ssh-rsa-cert-v01@openssh.com': _read_KEY_RSA_CERT,
-    'ssh-xmss-cert-v01@openssh.com': _read_KEY_XMSS_CERT,
-    'ssh-xmss@openssh.com': _read_KEY_XMSS,
+    "ecdsa-sha2-nistp256": _read_KEY_ECDSA,
+    "ecdsa-sha2-nistp256-cert-v01@openssh.com": _read_KEY_ECDSA_CERT,
+    "ecdsa-sha2-nistp384": _read_KEY_ECDSA,
+    "ecdsa-sha2-nistp384-cert-v01@openssh.com": _read_KEY_ECDSA_CERT,
+    "ecdsa-sha2-nistp521": _read_KEY_ECDSA,
+    "ecdsa-sha2-nistp521-cert-v01@openssh.com": _read_KEY_ECDSA_CERT,
+    "rsa-sha2-256": _read_KEY_RSA,
+    "rsa-sha2-256-cert-v01@openssh.com": _read_KEY_RSA_CERT,
+    "rsa-sha2-512": _read_KEY_RSA,
+    "rsa-sha2-512-cert-v01@openssh.com": _read_KEY_RSA_CERT,
+    "ssh-dss": _read_KEY_DSA,
+    "ssh-dss-cert-v01@openssh.com": _read_KEY_DSA_CERT,
+    "ssh-ed25519": _read_KEY_ED25519,
+    "ssh-ed25519-cert-v01@openssh.com": _read_KEY_ED25519_CERT,
+    "ssh-rsa": _read_KEY_RSA,
+    "ssh-rsa-cert-v01@openssh.com": _read_KEY_RSA_CERT,
+    "ssh-xmss-cert-v01@openssh.com": _read_KEY_XMSS_CERT,
+    "ssh-xmss@openssh.com": _read_KEY_XMSS,
 }
 
 
@@ -119,7 +119,7 @@ def read_private_key_data(bio):
     start_idx = bio.tell()
     reader = _readers.get(key_format.decode())
     if not reader:
-        raise NotImplementedError(f'Unknown key format {key_format!r}')
+        raise NotImplementedError(f"Unknown key format {key_format!r}")
     reader(bio)
     end_idx = bio.tell()
     bytes_read = end_idx - start_idx
