@@ -21,7 +21,7 @@ def read_openssh_string(bin_fp):
     if len(buf) != length:
         raise ValueError(
             'short read for string (expected %d bytes, read %d)'
-            % (length, len(buf))
+            % (length, len(buf)),
         )
     return buf
 
@@ -53,7 +53,7 @@ def unarmor_ascii_openssh_key(data):
         line = next(fp, '')
         if not line:
             raise ValueError(
-                'unexpected end-of-file before OpenSSH Private Key postlude'
+                'unexpected end-of-file before OpenSSH Private Key postlude',
             )
         line = line.strip()
         if line == '-----END OPENSSH PRIVATE KEY-----':

@@ -34,14 +34,14 @@ class Keypair:
         Convert the key data into an usable private key object.
         """
         if self.key_format == b'ssh-rsa':
-            from .cryptography_interop import _convert_rsa_private_key
+            from .cryptography_interop import _convert_rsa_private_key  # noqa: PLC0415
 
             return _convert_rsa_private_key(keypair=self)
 
         if self.key_format == b'ssh-ed25519':
-            from .cryptography_interop import _convert_ed25519
+            from .cryptography_interop import _convert_ed25519  # noqa: PLC0415
             return _convert_ed25519(keypair=self)
 
         raise NotImplementedError(
-            'Unable to convert %s keys' % self.key_format
+            'Unable to convert %s keys' % self.key_format,
         )

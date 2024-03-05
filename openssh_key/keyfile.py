@@ -3,8 +3,8 @@ import struct
 
 from .excs import CipherNotSupported
 from .keypair import Keypair
-from .private_keys import read_private_key_data
 from .openssh_io import read_openssh_string, unarmor_ascii_openssh_key
+from .private_keys import read_private_key_data
 
 AUTH_MAGIC = b"openssh-key-v1\0"
 
@@ -48,7 +48,7 @@ class OpenSSHKeyFile:
         header = bio.read(len(AUTH_MAGIC))
         if header != AUTH_MAGIC:
             raise ValueError(
-                'data began with %r, not %r' % (header, AUTH_MAGIC)
+                'data began with %r, not %r' % (header, AUTH_MAGIC),
             )
         kf = cls()
         kf.cipher_name = read_openssh_string(bio)
@@ -60,7 +60,7 @@ class OpenSSHKeyFile:
         leftover = bio.read()
         if leftover:
             raise ValueError(
-                'not all data was read (left over: %r)' % leftover
+                'not all data was read (left over: %r)' % leftover,
             )
         return kf
 
@@ -87,14 +87,14 @@ class OpenSSHKeyFile:
         else:
             # TODO: support ciphers and populate decrypted_private_key here
             raise CipherNotSupported(
-                'The %r cipher is not yet supported' % self.cipher_name
+                'The %r cipher is not yet supported' % self.cipher_name,
             )
 
         bio = io.BytesIO(decrypted_private_keys)
         checkint1, checkint2 = struct.unpack('!II', bio.read(8))
         if checkint1 != checkint2:
             raise ValueError(
-                'checkint mismatch: %08x != %08x' % (checkint1, checkint2)
+                'checkint mismatch: %08x != %08x' % (checkint1, checkint2),
             )
         for public_key in self.public_keys:
             kp = Keypair()
