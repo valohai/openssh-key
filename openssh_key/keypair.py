@@ -23,11 +23,10 @@ class Keypair:
         """
         Get an "authorized_keys" style string representing the public key.
         """
-        return '%s %s %s' % (
-            self.key_format.decode(),
-            base64.b64encode(self.public_key).decode(),
-            self.comment.decode('UTF-8'),
-        )
+        b64_pubkey = base64.b64encode(self.public_key).decode()
+        comment_str = self.comment.decode('UTF-8')
+        keyformat_str = self.key_format.decode()
+        return f'{keyformat_str} {b64_pubkey} {comment_str}'
 
     def convert_to_cryptography_key(self):
         """
@@ -43,5 +42,5 @@ class Keypair:
             return _convert_ed25519(keypair=self)
 
         raise NotImplementedError(
-            'Unable to convert %s keys' % self.key_format,
+            f'Unable to convert {self.key_format} keys',
         )

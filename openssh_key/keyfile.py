@@ -48,7 +48,7 @@ class OpenSSHKeyFile:
         header = bio.read(len(AUTH_MAGIC))
         if header != AUTH_MAGIC:
             raise ValueError(
-                'data began with %r, not %r' % (header, AUTH_MAGIC),
+                f'data began with {header!r}, not {AUTH_MAGIC!r}',
             )
         kf = cls()
         kf.cipher_name = read_openssh_string(bio)
@@ -60,7 +60,7 @@ class OpenSSHKeyFile:
         leftover = bio.read()
         if leftover:
             raise ValueError(
-                'not all data was read (left over: %r)' % leftover,
+                f'not all data was read (left over: {leftover!r})',
             )
         return kf
 
@@ -87,14 +87,14 @@ class OpenSSHKeyFile:
         else:
             # TODO: support ciphers and populate decrypted_private_key here
             raise CipherNotSupported(
-                'The %r cipher is not yet supported' % self.cipher_name,
+                f'The {self.cipher_name!r} cipher is not yet supported',
             )
 
         bio = io.BytesIO(decrypted_private_keys)
         checkint1, checkint2 = struct.unpack('!II', bio.read(8))
         if checkint1 != checkint2:
             raise ValueError(
-                'checkint mismatch: %08x != %08x' % (checkint1, checkint2),
+                f'checkint mismatch: {checkint1:08x} != {checkint2:08x}',
             )
         for public_key in self.public_keys:
             kp = Keypair()

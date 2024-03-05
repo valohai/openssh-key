@@ -119,7 +119,7 @@ def read_private_key_data(bio):
     start_idx = bio.tell()
     reader = _readers.get(key_format.decode())
     if not reader:
-        raise NotImplementedError('Unknown key format %r' % key_format)
+        raise NotImplementedError(f'Unknown key format {key_format!r}')
     reader(bio)
     end_idx = bio.tell()
     bytes_read = end_idx - start_idx
