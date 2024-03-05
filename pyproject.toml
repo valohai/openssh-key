@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "openssh-key"
+dynamic = ["version"]
+description = "Tools to deal with OpenSSH2 (RFC4716) keys"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Valohai" },
+]
+maintainers = [
+    { name = "Aarni Koskela", email = "akx@iki.fi" },
+]
+dependencies = []
+
+[project.optional-dependencies]
+convert = [
+    "cryptography",
+]
+dev = [
+    "flake8",
+    "isort",
+    "pydocstyle",
+    "pytest-cov",
+]
+
+[project.urls]
+Homepage = "https://github.com/valohai/openssh_key"
+
+[tool.hatch.version]
+path = "openssh_key/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/openssh_key",
+]
