@@ -1,0 +1,70 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "openssh-key"
+dynamic = ["version"]
+description = "Tools to deal with OpenSSH2 (RFC4716) keys"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.7"
+authors = [
+    { name = "Valohai" },
+]
+maintainers = [
+    { name = "Aarni Koskela", email = "akx@iki.fi" },
+]
+dependencies = []
+
+[project.optional-dependencies]
+convert = [
+    "cryptography<42", # Will be unpinned shortly
+]
+dev = [
+    "pytest-cov",
+]
+
+[project.urls]
+Homepage = "https://github.com/valohai/openssh_key"
+
+[tool.hatch.version]
+path = "openssh_key/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/openssh_key",
+]
+
+[tool.ruff]
+preview = true
+target-version = "py37"
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = [
+    "B",
+    "C",
+    "COM",
+    "E",
+    "F",
+    "I",
+    "PL",
+    "PT",
+    "PTH",
+    "RET",
+    "S",
+    "SIM",
+    "T",
+    "TRY",
+    "UP",
+    "W",
+]
+ignore = [
+    "F841",
+    "SIM108",
+    "TRY003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "PL"]

@@ -3,8 +3,8 @@ import struct
 
 from .excs import CipherNotSupported
 from .keypair import Keypair
-from .private_keys import read_private_key_data
 from .openssh_io import read_openssh_string, unarmor_ascii_openssh_key
+from .private_keys import read_private_key_data
 
 AUTH_MAGIC = b"openssh-key-v1\0"
 
@@ -16,14 +16,14 @@ class OpenSSHKeyFile:
 
     # The cipher used to encrypt this file.
     # At least b'none' and b'aes256-ctr' are known to exist.
-    cipher_name = b''
+    cipher_name = b""
 
     # The key derivation function used for the cipher's key material.
     # In the PROTOCOL.key file, b'none' or b'bcrypt' are specified.
-    kdf_name = b''
+    kdf_name = b""
 
     # KDF-specific options for the KDF.
-    kdf_options = b''
+    kdf_options = b""
 
     # The number of keys in this file.
     num_keys = 0
@@ -48,19 +48,19 @@ class OpenSSHKeyFile:
         header = bio.read(len(AUTH_MAGIC))
         if header != AUTH_MAGIC:
             raise ValueError(
-                'data began with %r, not %r' % (header, AUTH_MAGIC)
+                f"data began with {header!r}, not {AUTH_MAGIC!r}",
             )
         kf = cls()
         kf.cipher_name = read_openssh_string(bio)
         kf.kdf_name = read_openssh_string(bio)
         kf.kdf_options = read_openssh_string(bio)
-        kf.num_keys, = struct.unpack('!I', bio.read(4))
+        (kf.num_keys,) = struct.unpack("!I", bio.read(4))
         kf.public_keys = [read_openssh_string(bio) for x in range(kf.num_keys)]
         kf.encrypted_private_keys = read_openssh_string(bio)
         leftover = bio.read()
         if leftover:
             raise ValueError(
-                'not all data was read (left over: %r)' % leftover
+                f"not all data was read (left over: {leftover!r})",
             )
         return kf
 
@@ -82,19 +82,19 @@ class OpenSSHKeyFile:
         :param passphrase: The passphrase required to decrypt the file.
         :return: Generator of Keypair objects.
         """
-        if self.cipher_name == b'none':
+        if self.cipher_name == b"none":
             decrypted_private_keys = self.encrypted_private_keys
         else:
             # TODO: support ciphers and populate decrypted_private_key here
             raise CipherNotSupported(
-                'The %r cipher is not yet supported' % self.cipher_name
+                f"The {self.cipher_name!r} cipher is not yet supported",
             )
 
         bio = io.BytesIO(decrypted_private_keys)
-        checkint1, checkint2 = struct.unpack('!II', bio.read(8))
+        checkint1, checkint2 = struct.unpack("!II", bio.read(8))
         if checkint1 != checkint2:
             raise ValueError(
-                'checkint mismatch: %08x != %08x' % (checkint1, checkint2)
+                f"checkint mismatch: {checkint1:08x} != {checkint2:08x}",
             )
         for public_key in self.public_keys:
             kp = Keypair()
