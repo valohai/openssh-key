@@ -24,6 +24,8 @@ jobs:
       - name: Test with pytest
         run: pytest -ra --cov .
       - uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   Lint:
     runs-on: ubuntu-latest
     steps:
